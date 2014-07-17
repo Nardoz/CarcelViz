@@ -1,4 +1,4 @@
-HotelViz
+CarcelViz
 ========
 
-Visualización interactiva de ocupación hotelera de los principales turísticos de argentina.
+Visualización interactiva de las cárceles argentinas.
