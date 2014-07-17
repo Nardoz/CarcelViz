@@ -1,4 +1,4 @@
-d3.datavizTurismo = function(containerId,width,cb) {
+d3.datavizCarceles = function(containerId,width,cb) {
 
   //Init vars
   var height=750,
@@ -58,7 +58,7 @@ d3.datavizTurismo = function(containerId,width,cb) {
   };
 
   function _createPath() {
-    scale = d3.geo.mercator().scale(900).center([-65, -34]).translate([width / 2 - 30, height / 2 - 125]);
+    scale = d3.geo.mercator().scale(700).center([-65, -34]).translate([width / 2 - 30, height / 2 - 125]);
     projection = scale;
     path = d3.geo.path().projection(scale);
 
@@ -197,7 +197,8 @@ d3.datavizTurismo = function(containerId,width,cb) {
 
       svg.selectAll('circle.ciudad')
       .on("mouseover", function(d) {
-              var innerHTML = d.ciudad + '<br/><strong>' + name + '<br/>' + DatavizTurismo.dotSeparateNumber(d[field]) + '</strong>';
+
+              var innerHTML = d.ciudad + '<br/><strong>' + name + '<br/>' + DatavizCarceles.dotSeparateNumber(d[field]) + '</strong>';
               tooltip.transition()
                      .duration(100)
                      .style("opacity", .9)

@@ -45,35 +45,32 @@ var DatasetFilter = function() {
 
         var memo2 = _.clone(memo);
 
-        memo2.habitaciones_disp = memo2.habitaciones_disp + item.habitaciones_disp;
-        memo2.habitaciones_ocup = memo2.habitaciones_ocup + item.habitaciones_ocup;
-        memo2.plazas_disp       = memo2.plazas_disp + item.plazas_disp;
-        memo2.plazas_ocup       = memo2.plazas_ocup + item.plazas_ocup;
-        memo2.establecimientos  = memo2.establecimientos + item.establecimientos;
-        memo2.viajeros          = memo2.viajeros + item.viajeros;
-        memo2.estadia           = memo2.estadia + item.estadia;
+        memo2.poblacion         = memo2.poblacion + item.poblacion;
+        memo2.fallecimientos    = memo2.fallecimientos + item.fallecimientos;
+        memo2.mt                = memo2.mt + item.mt;
+        memo2.sanciones         = memo2.sanciones + item.sanciones;
         memo2.lat               = item.lat;
         memo2.lon               = item.lon;
         memo2.anio              = item.anio;
         memo2.mes               = item.mes;
         memo2.provincia         = item.provincia;
         memo2.ciudad            = item.ciudad;
+        memo2.establecimiento   = item.establecimiento;
+        
 
         return memo2;
       },{
-        establecimientos: 0,
-        estadia: 0,
-        habitaciones_disp: 0,
-        habitaciones_ocup: 0,
-        plazas_disp: 0,
-        plazas_ocup: 0,
-        viajeros: 0,
+        poblacion: 0,
+        fallecimientos: 0,
+        mt: 0,
+        sanciones: 0,
         lat: 0,
         lon: 0,
         anio: 0,
         mes: 0,
         provincia: '',
-        ciudad: ''
+        ciudad: '',
+        establecimiento: ''
       });
 
       /*
@@ -99,7 +96,7 @@ var DatasetFilter = function() {
         return totals;
       };
 
-      reduced = calculateAverage(city, reduced, 'establecimientos,estadia');
+      reduced = calculateAverage(city, reduced, '');
 
       data.push(reduced);
     });
@@ -116,6 +113,10 @@ var DatasetFilter = function() {
     var sorted = _.sortBy(data, function(row) {
       return row[field];
     });
+
+    sorted = _.filter(sorted, function(item) {console.log(item[field])
+      return item[field] > 0;
+    })
 
     if (sortOrder === 'desc') sorted = sorted.reverse();
 

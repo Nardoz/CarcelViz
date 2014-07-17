@@ -1,16 +1,16 @@
 /*globals window, document, DatasetFilter, DatasetChart, _, jQuery, d3, ko*/
 
-var DatavizTurismo;
+var DatavizCarceles;
 
 ;(function(global, document, $, d3, ko){
 
   'use strict';
 
-  DatavizTurismo = global.DatavizTurismo = global.DatavizTurismo || {};
+  DatavizCarceles = global.DatavizCarceles = global.DatavizCarceles || {};
 
-  DatavizTurismo.$slider = $('#slider');
+  DatavizCarceles.$slider = $('#slider');
 
-  DatavizTurismo.sliderOptions = {
+  DatavizCarceles.sliderOptions = {
     min:0,
     max:100,
     step:1,
@@ -19,41 +19,41 @@ var DatavizTurismo;
     handle:'round',
     selection:'after',
     formater:function(v){
-      return DatavizTurismo.convertSliderValue(v)+'%';
+      return DatavizCarceles.convertSliderValue(v)+'%';
     }
   };
 
-  DatavizTurismo.headers = [];
+  DatavizCarceles.headers = [];
 
-  DatavizTurismo.data = [];
+  DatavizCarceles.data = [];
 
-  DatavizTurismo.map;
+  DatavizCarceles.map;
 
-  DatavizTurismo.rankingLimit = 3;
+  DatavizCarceles.rankingLimit = 10;
 
-  DatavizTurismo.$twitterButton = $('.twitter');
+  DatavizCarceles.$twitterButton = $('.twitter');
 
-  DatavizTurismo.$facebookButton = $('.facebook');
+  DatavizCarceles.$facebookButton = $('.facebook');
 
-  DatavizTurismo.$googleButton = $('.gplus');
+  DatavizCarceles.$googleButton = $('.gplus');
 
-  DatavizTurismo.$text = $('.texto-resumen');
+  DatavizCarceles.$text = $('.texto-resumen');
 
-  DatavizTurismo.$orderSelectors = $('.filter-order');
+  DatavizCarceles.$orderSelectors = $('.filter-order');
 
-  DatavizTurismo.$consultarBtn = $('#consultar');
+  DatavizCarceles.$consultarBtn = $('#consultar');
 
-  DatavizTurismo.$desdeBtn = $('#fecha-desde');
+  DatavizCarceles.$desdeBtn = $('#fecha-desde');
 
-  DatavizTurismo.$hastaBtn = $('#fecha-hasta');
+  DatavizCarceles.$hastaBtn = $('#fecha-hasta');
 
-  DatavizTurismo.$filter = $('#filter');
+  DatavizCarceles.$filter = $('#filter');
 
-  DatavizTurismo.$fullScreenBtb = $('#full-screen-btn');
+  DatavizCarceles.$fullScreenBtb = $('#full-screen-btn');
 
-  DatavizTurismo.filter = new DatasetFilter();
+  DatavizCarceles.filter = new DatasetFilter();
 
-  DatavizTurismo.bindings = {};
+  DatavizCarceles.bindings = {};
 
   var FilterOption = function(name, id, icon) {
     this.name = name;
@@ -61,45 +61,45 @@ var DatavizTurismo;
     this.icon = icon;
   };
 
-  DatavizTurismo.init = function () {
+  DatavizCarceles.init = function () {
     //Init map
-    DatavizTurismo.map = d3.datavizTurismo('map-container',$('#map-container').width(),DatavizTurismo.retrieveData);
+    DatavizCarceles.map = d3.datavizCarceles('map-container',$('#map-container').width(),DatavizCarceles.retrieveData);
 
     //Init button
-    DatavizTurismo.$filter.on('change',DatavizTurismo.filterData);
-    DatavizTurismo.$twitterButton.on('click',DatavizTurismo.shareTwitter);
-    DatavizTurismo.$facebookButton.on('click',DatavizTurismo.shareFacebook);
-    DatavizTurismo.$googleButton.on('click',DatavizTurismo.shareGoogle);
-    DatavizTurismo.$fullScreenBtb.on('click',DatavizTurismo.fullScreen);
+    DatavizCarceles.$filter.on('change',DatavizCarceles.filterData);
+    DatavizCarceles.$twitterButton.on('click',DatavizCarceles.shareTwitter);
+    DatavizCarceles.$facebookButton.on('click',DatavizCarceles.shareFacebook);
+    DatavizCarceles.$googleButton.on('click',DatavizCarceles.shareGoogle);
+    DatavizCarceles.$fullScreenBtb.on('click',DatavizCarceles.fullScreen);
 
     var months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
     $('#dateSelector').dateRangeSlider({
       bounds: {
-        min: new Date(2012, 0, 1),
-        max: new Date(2012, 11, 30)
+        min: new Date(2009, 0, 1),
+        max: new Date(2013, 12, 30)
       },
       defaultValues: {
-        min: new Date(2012, 4, 1),
-        max: new Date(2012, 7, 31)
+        min: new Date(2009, 4, 1),
+        max: new Date(2009, 7, 31)
       },
       arrows: true,
       step:{
-        months: 1
+        months: 12
       },
       formatter: function(val) {
         var month = val.getMonth() + 1;
         var year = val.getFullYear();
 
-        return month + '-' + year;
+        return year;
       },
       scales: [{
         next: function(value) {
           var next = new Date(value);
-          return new Date(next.setMonth(value.getMonth() + 1));
+          return new Date(next.setMonth(value.getMonth() + 12));
         },
         label: function(value) {
-          return months[value.getMonth()];
+          return value.getFullYear();
         },
         format: function(tickContainer, tickStart, tickEnd) {
           tickContainer.addClass('month');
@@ -111,14 +111,14 @@ var DatavizTurismo;
       var start = (data.values.min.getMonth() + 1) + '-' + data.values.min.getFullYear();
       var end   = (data.values.max.getMonth() + 1) + '-' + data.values.max.getFullYear();
 
-      DatavizTurismo.$desdeBtn.val(start);
-      DatavizTurismo.$hastaBtn.val(end);
-      DatavizTurismo.filterData();
+      DatavizCarceles.$desdeBtn.val(start);
+      DatavizCarceles.$hastaBtn.val(end);
+      DatavizCarceles.filterData();
     });
 
-    DatavizTurismo.$filter.selectpicker();
+    DatavizCarceles.$filter.selectpicker();
 
-    global.m = 0;
+    global.y = 2009;
     $('#play').click(function() {
 
       if($(this).hasClass('playing')) {
@@ -129,55 +129,57 @@ var DatavizTurismo;
 
         global.interval = global.setInterval(function() {
 
-          $('#dateSelector').dateRangeSlider('values', new Date(2012, global.m, 1), new Date(2012, global.m, 27));
+          $('#dateSelector').dateRangeSlider('values', new Date(global.y, 0, 1), new Date(global.y, 12, 27));
 
-          if (global.m < 10) {
-            global.m++;
+          if (global.y < 2013) {
+            global.y++;
           } else {
-            global.m = 0;
+            global.y = 2009;
           }
 
-        }, 300);
+        }, 600);
       }
 
     });
 
   };
 
-  DatavizTurismo.retrieveData = function(){
+  DatavizCarceles.retrieveData = function(){
 
-    $.getJSON('data/ocupacion_hotelera.json', function(j){
-      DatavizTurismo.data = j.rows;
-      DatavizTurismo.filter.setDataset(j.rows);
-      DatavizTurismo.filterData();
+    $.getJSON('data/carceles.json', function(j){
+      DatavizCarceles.data = j.rows;
+      DatavizCarceles.filter.setDataset(j.rows);
+      DatavizCarceles.filterData();
     });
 
   };
 
-  DatavizTurismo.filterData = function(){
-    var filter = DatavizTurismo.filter;
+  DatavizCarceles.filterData = function(){
+    var filter = DatavizCarceles.filter;
     var j = filter.filter(
-      DatavizTurismo.$desdeBtn.val(),
-      DatavizTurismo.$hastaBtn.val()
+      DatavizCarceles.$desdeBtn.val(),
+      DatavizCarceles.$hastaBtn.val()
     );
 
-    var filterField = DatavizTurismo.$filter.val(),
-        limit = DatavizTurismo.rankingLimit;
+    var filterField = DatavizCarceles.$filter.val(),
+        limit = DatavizCarceles.rankingLimit;
 
     // agregamos el campo valor con el filterField especificado
     _.each(j, function(row) {
       row.valor = row[filterField];
     });
 
-    DatavizTurismo.topRanking = filter.ranking(j, filterField, 'desc', limit);
-    DatavizTurismo.botttomRanking = filter.ranking(j, filterField, 'asc', limit);
+    $('#title').html($(':selected', DatavizCarceles.$filter.parent()).html().toLowerCase());
 
-    DatavizTurismo.updateMap(j);
+    DatavizCarceles.topRanking = filter.ranking(j, filterField, 'desc', limit);
+    DatavizCarceles.botttomRanking = filter.ranking(j, filterField, 'asc', limit);
 
-    DatasetChart.graph(DatavizTurismo.topRanking);
+    DatavizCarceles.updateMap(j);
+
+    DatasetChart.graph(DatavizCarceles.topRanking);
   };
 
-  DatavizTurismo.fullScreen = function() {
+  DatavizCarceles.fullScreen = function() {
     var el = document.documentElement,
         rfs =
           el.requestFullScreen ||
@@ -187,18 +189,19 @@ var DatavizTurismo;
     rfs.call(el);
   };
 
-  DatavizTurismo.getLocation = function(href) {
+  DatavizCarceles.getLocation = function(href) {
     var l = document.createElement('a');
     l.href = href;
     return l;
   };
 
-  DatavizTurismo.shareTwitter = function(e){
+  DatavizCarceles.shareTwitter = function(e){
     e.preventDefault();
+
     var qObj = {
-      'text': DatavizTurismo.$text.text(),
-      'related': 'palamago,lndata',
-      'hashtags': 'argentina,censo,paisFederal'
+      'text': DatavizCarceles.$text.text(),
+      'related': 'carceles',
+      'hashtags': 'argentina,carceles'
     };
 
     var qs = $.param(qObj);
@@ -219,13 +222,13 @@ var DatavizTurismo;
     return false;
   };
 
-  DatavizTurismo.shareFacebook = function(e){
+  DatavizCarceles.shareFacebook = function(e){
     e.preventDefault();
     var qs =
       '&p[url]='+window.location+
-      '&p[title]='+'Argentina, un país POCO federal...'+
+      '&p[title]='+'Visualización de las cárceles argentinas...'+
       '&p[images][0]='+window.location+'img/share.png'+
-      '&p[summary]='+DatavizTurismo.$text.text();
+      '&p[summary]='+DatavizCarceles.$text.text();
 
     var width  = 575,
       height = 400,
@@ -243,7 +246,7 @@ var DatavizTurismo;
     return false;
   };
 
-  DatavizTurismo.shareGoogle = function(e){
+  DatavizCarceles.shareGoogle = function(e){
     e.preventDefault();
     var qs = 'url=' + window.location;
 
@@ -263,14 +266,14 @@ var DatavizTurismo;
     return false;
   };
 
-  DatavizTurismo.updateMap = function(cities) {
-    var $filter = DatavizTurismo.$filter;
-    DatavizTurismo.map.update(
+  DatavizCarceles.updateMap = function(cities) {
+    var $filter = DatavizCarceles.$filter;
+    DatavizCarceles.map.update(
       cities, $filter.val(), $filter.find(':selected').text()
     );
   };
 
-  DatavizTurismo.dotSeparateNumber = function(val){
+  DatavizCarceles.dotSeparateNumber = function(val){
     while (/(\d+)(\d{3})/.test(val.toString())){
       val = val.toString().replace(/(\d+)(\d{3})/, '$1'+'.'+'$2');
     }
@@ -280,5 +283,5 @@ var DatavizTurismo;
 })(window, document, jQuery, d3, ko);
 
 window.onload = function() {
-  DatavizTurismo.init();
+  DatavizCarceles.init();
 };

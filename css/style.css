@@ -355,3 +355,32 @@ p.texto-resumen .important2{
 #slider-container{
 	height: 110px;
 }
+
+#filter-container {
+	margin-top: 57px;
+}
+
+text {
+  font: 12px sans-serif;
+}
+
+svg {
+  display: block;
+}
+
+svg text {
+  fill: white;
+  font-weight: bolder
+}
+
+#chart1 svg {
+  height: 300px;
+  min-width: 400px;
+  min-height: 100px;
+/*
+  margin: 10px;
+  Minimum height and width is a good idea to prevent negative SVG dimensions...
+  For example width should be =< margin.left + margin.right + 1,
+  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
+*/
+}
